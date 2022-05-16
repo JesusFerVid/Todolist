@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ListView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.TaskController">
+	<left>
+		<ListView fx:id="mainListView">
+
+		</ListView>
+	</left>
+</BorderPane>
