@@ -1,5 +1,6 @@
 package com.severo.todolist;
 
+import com.severo.todolist.datamodel.TaskSingleton;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,20 @@ public class MainApplication extends Application {
 		stage.setTitle("Todolist");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	@Override
+	public void init() throws Exception {
+		try {
+			TaskSingleton.getInstance().loadTasks();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@Override
+	public void stop() throws Exception {
+		TaskSingleton.getInstance().saveTasks();
 	}
 
 	public static void main(String[] args) {

@@ -1,14 +1,26 @@
 package com.severo.todolist.controller;
 
 import com.severo.todolist.datamodel.Task;
+import com.severo.todolist.datamodel.TaskSingleton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskController {
+	@FXML
+	private TextArea detailsTextArea;
+	@FXML
+	private Label dateLabel;
 	private List<Task> tasks;
 
 	@FXML
@@ -27,5 +39,28 @@ public class TaskController {
 		tasks.add(t4);
 
 		mainListView.getItems().addAll(tasks);
+
+		TaskSingleton.getInstance().setTasks(tasks);
+
+		// Simular un click
+		mainListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+			@Override
+			public void changed(ObservableValue<? extends Task> observableValue, Task oldTask, Task newTask) {
+				if (newTask != null) {
+					Task tarea = mainListView.getSelectionModel().getSelectedItem();
+					detailsTextArea.setText(tarea.getDetails());
+					dateLabel.setText(tarea.getExpirationDate().toString());
+				}
+			}
+		});
+
+		mainListView.getSelectionModel().selectFirst();
+	}
+
+	@FXML
+	public void processListViewClick(MouseEvent event) {
+		Task tarea = mainListView.getSelectionModel().getSelectedItem();
+		detailsTextArea.setText(tarea.getDetails());
+		dateLabel.setText(tarea.getExpirationDate().toString());
 	}
 }

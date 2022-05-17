@@ -2,10 +2,27 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.TaskController">
 	<left>
-		<ListView fx:id="mainListView">
+		<ListView fx:id="mainListView" onMouseClicked="#processListViewClick">
 
 		</ListView>
 	</left>
+	<center>
+		<VBox style="-fx-background-color: white;">
+			<TextArea fx:id="detailsTextArea" VBox.vgrow="ALWAYS"/>
+			<HBox>
+				<Label fx:id="dateLabel">
+					<font>
+						<Font size="15"/>
+					</font>
+				</Label>
+			</HBox>
+		</VBox>
+	</center>
 </BorderPane>
