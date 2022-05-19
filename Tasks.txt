@@ -2,3 +2,5 @@ Examen de programación	Estudiar temas 6 y 7	2022-06-06
 Excursión Aqualandia	Salir y pasar un día en el parque acuático	2022-06-17
 Sacar al perro	Dar la vuelta al pueblo	2022-06-24
 Ir al cine	Ver Doctor Strange 2	2022-07-07
+Tarea nueva	Introduzca descripción creativa	2022-05-17
+Terminar esta práctica	A ser posible no morir en el intento	2022-05-20

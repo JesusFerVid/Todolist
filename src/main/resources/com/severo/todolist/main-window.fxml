@@ -7,9 +7,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.TaskController">
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<BorderPane fx:id="mainBorderPane"
+	xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.MainController">
+	<top>
+		<MenuBar>
+			<Menu text="File">
+				<items>
+					<MenuItem text="New" onAction="#showNewTaskDialog"/>
+					<SeparatorMenuItem />
+					<MenuItem text="Exit" />
+				</items>
+			</Menu>
+		</MenuBar>
+	</top>
 	<left>
-		<ListView fx:id="mainListView" onMouseClicked="#processListViewClick">
+		<ListView fx:id="mainListView">
 
 		</ListView>
 	</left>

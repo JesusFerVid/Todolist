@@ -28,12 +28,12 @@ public class TaskSingleton {
 			Task task;
 			while (it.hasNext()) {
 				task = it.next();
-				StringBuilder sb = new StringBuilder(task.getDescription());
-				sb.append("\t");
-				sb.append(task.getDetails());
-				sb.append("\t");
-				sb.append(task.getExpirationDate().toString());
-				writer.write(sb.toString());
+				String linea = task.getDescription() +
+					"\t" +
+					task.getDetails() +
+					"\t" +
+					task.getExpirationDate().toString();
+				writer.write(linea);
 				writer.newLine();
 			}
 		} finally {
@@ -61,6 +61,10 @@ public class TaskSingleton {
 				reader.close();
 			}
 		}
+	}
+
+	public void addTask(Task task) {
+		tasks.add(task);
 	}
 
 	public static TaskSingleton getInstance() {
