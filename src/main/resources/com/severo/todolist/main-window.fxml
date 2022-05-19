@@ -31,7 +31,7 @@
 	</left>
 	<center>
 		<VBox style="-fx-background-color: white;">
-			<TextArea fx:id="detailsTextArea" VBox.vgrow="ALWAYS"/>
+			<TextArea fx:id="detailsTextArea" VBox.vgrow="ALWAYS" wrapText="true"/>
 			<HBox>
 				<Label fx:id="dateLabel">
 					<font>

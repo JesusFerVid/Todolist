@@ -1,5 +1,8 @@
 package com.severo.todolist.datamodel;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,14 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class TaskSingleton {
 	private static TaskSingleton instance = new TaskSingleton();
 	private static String filename = "Tasks.txt";
-	private List<Task> tasks;
+	private ObservableList<Task> tasks;
 
 	private TaskSingleton() {
 
@@ -44,7 +45,7 @@ public class TaskSingleton {
 	}
 
 	public void loadTasks() throws IOException {
-		tasks = new ArrayList<>();
+		tasks = FXCollections.observableArrayList();
 		Path path = Paths.get(filename);
 		BufferedReader reader = Files.newBufferedReader(path);
 
@@ -67,21 +68,21 @@ public class TaskSingleton {
 		tasks.add(task);
 	}
 
+	public void deleteTask(Task task) {
+		tasks.remove(task);
+	}
+
 	public static TaskSingleton getInstance() {
 		return instance;
 	}
 
-	public List<Task> getTasks() {
+	public ObservableList<Task> getTasks() {
 		return tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
 	}
 }
 
 class Test {
 	public static void main(String[] args) {
-		List<Task> tareas = TaskSingleton.getInstance().getTasks();
+		ObservableList<Task> tareas = TaskSingleton.getInstance().getTasks();
 	}
 }

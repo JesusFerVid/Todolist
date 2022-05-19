@@ -6,13 +6,19 @@ import com.severo.todolist.datamodel.Task;
 import com.severo.todolist.datamodel.TaskSingleton;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
@@ -25,7 +31,7 @@ public class MainController {
 	@FXML
 	private Label dateLabel;
 
-	private List<Task> tasks;
+	private ObservableList<Task> tasks;
 
 	@FXML
 	private ListView<Task> mainListView;
@@ -33,8 +39,19 @@ public class MainController {
 	@FXML
 	private BorderPane mainBorderPane;
 
+	@FXML
+	private ContextMenu listViewContextMenu;
+
 	public void initialize() {
-		mainListView.getItems().setAll(TaskSingleton.getInstance().getTasks());
+		listViewContextMenu = new ContextMenu();
+		MenuItem deleteMenuItem = new MenuItem("Delete");
+		deleteMenuItem.setOnAction(event -> {
+			Task t = mainListView.getSelectionModel().getSelectedItem();
+			deleteTask(t);
+		});
+		listViewContextMenu.getItems().add(deleteMenuItem);
+
+		mainListView.setItems(TaskSingleton.getInstance().getTasks());
 
 		// Simular un click
 		mainListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
@@ -50,6 +67,30 @@ public class MainController {
 		});
 
 		mainListView.getSelectionModel().selectFirst();
+
+		// Destacar en rojo las celdas que expiran hoy
+		mainListView.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
+			@Override
+			public ListCell<Task> call(ListView<Task> taskListView) {
+				ListCell<Task> cell = new ListCell<>(){
+					@Override
+					protected void updateItem(Task task, boolean isEmpty) {
+						super.updateItem(task, isEmpty);
+						if (isEmpty) {
+							setText(null);
+						} else {
+							setText(task.getDescription());
+							if(task.getExpirationDate().equals(LocalDate.now())) {
+								setTextFill(Color.RED);
+							} else if (task.getExpirationDate().equals(LocalDate.now().plusDays(1))){
+								setTextFill(Color.ORANGE);
+							}
+						}
+					}
+				};
+				return cell;
+			}
+		});
 	}
 
 	@FXML
@@ -74,8 +115,19 @@ public class MainController {
 		if (response.isPresent() && response.get() == ButtonType.OK) {
 			DialogController controller = loader.getController();
 			Task t = controller.onOKButtonClick();
-			mainListView.getItems().setAll(TaskSingleton.getInstance().getTasks());
 			mainListView.getSelectionModel().select(t);
+		}
+	}
+
+	private void deleteTask(Task t) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Deleting task");
+		alert.setHeaderText("Delete a task");
+		alert.setContentText("Are you sure?");
+
+		Optional<ButtonType> response = alert.showAndWait();
+		if (response.isPresent() && response.get() == ButtonType.OK) {
+			TaskSingleton.getInstance().deleteTask(t);
 		}
 	}
 }
