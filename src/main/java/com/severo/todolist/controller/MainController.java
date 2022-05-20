@@ -4,6 +4,7 @@ import com.severo.todolist.DialogController;
 import com.severo.todolist.MainApplication;
 import com.severo.todolist.datamodel.Task;
 import com.severo.todolist.datamodel.TaskSingleton;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -53,6 +54,12 @@ public class MainController {
 		});
 		listViewContextMenu.getItems().add(deleteMenuItem);
 
+		MenuItem editMenuItem = new MenuItem("Edit");
+		editMenuItem.setOnAction(event -> {
+			Task t = mainListView.getSelectionModel().getSelectedItem();
+			editTask(t);
+		});
+		listViewContextMenu.getItems().add(editMenuItem);
 
 		mainListView.setItems(TaskSingleton.getInstance().getTasks());
 
@@ -101,7 +108,6 @@ public class MainController {
 				return cell;
 			}
 		});
-
 	}
 
 	@FXML
@@ -130,6 +136,10 @@ public class MainController {
 		}
 	}
 
+	private void editTask(Task t) {
+
+	}
+
 	private void deleteTask(Task t) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Deleting task");
@@ -150,5 +160,10 @@ public class MainController {
 				deleteTask(t);
 			}
 		}
+	}
+
+	@FXML
+	public void onExitClicked() {
+		Platform.exit();
 	}
 }
