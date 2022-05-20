@@ -12,6 +12,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -51,6 +53,7 @@ public class MainController {
 		});
 		listViewContextMenu.getItems().add(deleteMenuItem);
 
+
 		mainListView.setItems(TaskSingleton.getInstance().getTasks());
 
 		// Simular un click
@@ -88,9 +91,17 @@ public class MainController {
 						}
 					}
 				};
+				cell.emptyProperty().addListener((obs, notEmpty, wasEmpty) -> {
+					if (wasEmpty) {
+						cell.setContextMenu(null);
+					} else {
+						cell.setContextMenu(listViewContextMenu);
+					}
+				});
 				return cell;
 			}
 		});
+
 	}
 
 	@FXML
@@ -128,6 +139,16 @@ public class MainController {
 		Optional<ButtonType> response = alert.showAndWait();
 		if (response.isPresent() && response.get() == ButtonType.OK) {
 			TaskSingleton.getInstance().deleteTask(t);
+		}
+	}
+
+	@FXML
+	public void onDeleteKeyPressed(KeyEvent event) {
+		if (event.getCode() == KeyCode.DELETE) {
+			Task t = mainListView.getSelectionModel().getSelectedItem();
+			if (t != null) {
+				deleteTask(t);
+			}
 		}
 	}
 }

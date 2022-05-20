@@ -11,21 +11,42 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Tooltip?>
 <BorderPane fx:id="mainBorderPane"
-	xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.MainController">
+			xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.MainController">
 	<top>
-		<MenuBar>
-			<Menu text="File">
-				<items>
-					<MenuItem text="New" onAction="#showNewTaskDialog"/>
-					<SeparatorMenuItem />
-					<MenuItem text="Exit" />
-				</items>
-			</Menu>
-		</MenuBar>
+		<VBox>
+			<MenuBar>
+				<Menu text="File">
+					<items>
+						<MenuItem text="New" onAction="#showNewTaskDialog"/>
+						<SeparatorMenuItem />
+						<MenuItem text="Exit" />
+					</items>
+				</Menu>
+			</MenuBar>
+			<HBox>
+				<ToolBar>
+					<Button onAction="#showNewTaskDialog">
+						<tooltip>
+							<Tooltip text="Add a new task"/>
+						</tooltip>
+						<graphic>
+							<ImageView>
+								<Image url="@/toolbarButtonGraphics/general/New16.gif"/>
+							</ImageView>
+						</graphic>
+					</Button>
+				</ToolBar>
+			</HBox>
+		</VBox>
 	</top>
 	<left>
-		<ListView fx:id="mainListView">
+		<ListView fx:id="mainListView" onKeyPressed="#onDeleteKeyPressed">
 
 		</ListView>
 	</left>
