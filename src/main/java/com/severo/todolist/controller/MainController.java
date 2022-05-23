@@ -203,6 +203,14 @@ public class MainController {
 
 	@FXML
 	public void onExitClicked() {
-		Platform.exit();
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setResizable(true);
+		alert.setTitle("Close application");
+		alert.setHeaderText("Exit");
+		alert.setContentText("Are you sure?");
+		Optional<ButtonType> response = alert.showAndWait();
+		if (response.isPresent() && response.get() == ButtonType.OK) {
+			Platform.exit();
+		}
 	}
 }
