@@ -65,7 +65,7 @@ public class MainController {
 		MenuItem editMenuItem = new MenuItem("Edit");
 		editMenuItem.setOnAction(event -> {
 			Task t = mainListView.getSelectionModel().getSelectedItem();
-			editTask(t);
+			editTask();
 		});
 		listViewContextMenu.getItems().add(editMenuItem);
 
@@ -153,8 +153,41 @@ public class MainController {
 		}
 	}
 
-	private void editTask(Task t) {
-		// TODO
+	@FXML
+	public void editTask() {
+		Task t = mainListView.getSelectionModel().getSelectedItem();
+		if (t == null) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("No task");
+			alert.setHeaderText("");
+			alert.setContentText("No task selected");
+			alert.showAndWait();
+			return;
+		}
+		Dialog<ButtonType> d = new Dialog<>();
+		d.setResizable(true);
+		d.initOwner(mainBorderPane.getScene().getWindow());
+		d.setResizable(true);
+		d.setTitle("New task");
+		FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("dialog.fxml"));
+		try {
+			d.getDialogPane().setContent(loader.load());
+		} catch (IOException exception) {
+			System.out.println(exception.getMessage());
+		}
+		d.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		d.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		d.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+		DialogController dc = loader.getController();
+		dc.loadTaskData(t);
+
+		Optional<ButtonType> response = d.showAndWait();
+
+		if (response.isPresent() && response.get() == ButtonType.OK) {
+			dc.onEditButtonClick(t);
+			mainListView.getSelectionModel().select(t);
+		}
 	}
 
 	private void deleteTask(Task t) {

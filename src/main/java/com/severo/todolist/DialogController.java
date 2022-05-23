@@ -22,4 +22,17 @@ public class DialogController {
 		TaskSingleton.getInstance().addTask(t);
 		return t;
 	}
+
+	public Task onEditButtonClick(Task t) {
+		t.setDescription(description.getText());
+		t.setDetails(details.getText());
+		t.setExpirationDate(date.getValue());
+		return t;
+	}
+
+	public void loadTaskData(Task t) {
+		description.setText(t.getDescription());
+		details.setText(t.getDetails());
+		date.setValue(t.getExpirationDate());
+	}
 }

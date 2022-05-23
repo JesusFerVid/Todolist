@@ -25,6 +25,7 @@
 				<Menu text="File">
 					<items>
 						<MenuItem text="New" onAction="#showNewTaskDialog"/>
+						<MenuItem text="Edit" onAction="#editTask"/>
 						<SeparatorMenuItem />
 						<MenuItem text="Exit" onAction="#onExitClicked"/>
 					</items>
