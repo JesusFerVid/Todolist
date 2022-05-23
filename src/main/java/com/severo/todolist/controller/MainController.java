@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,10 +26,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 public class MainController {
+	@FXML
+	private ToggleButton todaysTaskButton;
+
 	@FXML
 	private TextArea detailsTextArea;
 
@@ -45,6 +51,8 @@ public class MainController {
 	@FXML
 	private ContextMenu listViewContextMenu;
 
+	private FilteredList<Task> taskFilteredList;
+
 	public void initialize() {
 		listViewContextMenu = new ContextMenu();
 		MenuItem deleteMenuItem = new MenuItem("Delete");
@@ -61,7 +69,16 @@ public class MainController {
 		});
 		listViewContextMenu.getItems().add(editMenuItem);
 
-		mainListView.setItems(TaskSingleton.getInstance().getTasks());
+		taskFilteredList = new FilteredList<>(TaskSingleton.getInstance().getTasks(), t -> true);
+
+		SortedList<Task> taskSortedList = new SortedList<>(taskFilteredList, new Comparator<Task>() {
+			@Override
+			public int compare(Task t1, Task t2) {
+				return t1.getExpirationDate().compareTo(t2.getExpirationDate());
+			}
+		});
+
+		mainListView.setItems(taskSortedList);
 
 		// Simular un click
 		mainListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
@@ -137,7 +154,7 @@ public class MainController {
 	}
 
 	private void editTask(Task t) {
-
+		// TODO
 	}
 
 	private void deleteTask(Task t) {
@@ -149,6 +166,28 @@ public class MainController {
 		Optional<ButtonType> response = alert.showAndWait();
 		if (response.isPresent() && response.get() == ButtonType.OK) {
 			TaskSingleton.getInstance().deleteTask(t);
+		}
+	}
+
+	@FXML
+	public void todaysTaskButtonClicked() {
+		Task sel = mainListView.getSelectionModel().getSelectedItem();
+		if (todaysTaskButton.isSelected()) {
+			taskFilteredList.setPredicate(t -> t.getExpirationDate().equals(LocalDate.now()));
+			if (taskFilteredList.isEmpty()) {
+				detailsTextArea.clear();
+				dateLabel.setText("");
+			} else {
+				mainListView.getSelectionModel().selectFirst();
+			}
+		} else {
+			taskFilteredList.setPredicate(t -> true);
+			if (sel == null) {
+				mainListView.getSelectionModel().selectFirst();
+			} else {
+				mainListView.getSelectionModel().select(sel);
+			}
+
 		}
 	}
 

@@ -16,6 +16,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:id="mainBorderPane"
 			xmlns:fx="http://javafx.com/fxml" fx:controller="com.severo.todolist.controller.MainController">
 	<top>
@@ -41,6 +42,16 @@
 							</ImageView>
 						</graphic>
 					</Button>
+					<ToggleButton fx:id="todaysTaskButton" onAction="#todaysTaskButtonClicked">
+						<tooltip>
+							<Tooltip text="Display today's task"/>
+						</tooltip>
+						<graphic>
+							<ImageView>
+								<Image url="@/toolbarButtonGraphics/general/Find16.gif"/>
+							</ImageView>
+						</graphic>
+					</ToggleButton>
 				</ToolBar>
 			</HBox>
 		</VBox>
